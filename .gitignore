@@ -2,7 +2,7 @@
 node_modules/
 
 # Compiled JavaScript files
-dist/
+dist
 
 # Package lock
 package-lock.json

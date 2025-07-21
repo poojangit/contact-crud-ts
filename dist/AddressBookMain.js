@@ -15,6 +15,10 @@ class AddressBookMain {
     }
     start() {
         this.displayWelcomeMessage();
+        this.addContactFromConsole();
+    }
+    addContactFromConsole() {
+        console.log("Add the contact details : ");
         const firstName = readline_sync_1.default.question("Enter First Name: ");
         const lastName = readline_sync_1.default.question("Enter Last Name: ");
         const address = readline_sync_1.default.question("Enter Address: ");
@@ -25,6 +29,11 @@ class AddressBookMain {
         const email = readline_sync_1.default.question("Enter Email: ");
         const contact = new Contact_1.Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
         this.addressBook.addContact(contact);
+        const shouldEdit = readline_sync_1.default.question("/n ✏️ Do you want to edit this contact now ? (y/n): ");
+        if (shouldEdit.toLowerCase() === "y") {
+            this.addressBook.editContactByName(firstName);
+        }
+        console.log("\n ✅ Contact Updated successfully!\n");
     }
 }
 const app = new AddressBookMain();

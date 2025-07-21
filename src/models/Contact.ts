@@ -1,3 +1,4 @@
+//* UC1 : Ability to create a contacts
 export class Contact {
     constructor(
         public firstName : string,
@@ -11,7 +12,7 @@ export class Contact {
     ){}
 
     displayContact(): void {
-        console.log("Contact Details : ");
+        console.log("\n Contact Details : ");
         console.log(`👤 Name       : ${this.firstName} ${this.lastName}` );
         console.log(`🏠 Address    : ${this.address}, ${this.city}, ${this.state} - ${this.zip}`);
         console.log(`📞 Phone No.  : ${this.phoneNumber}`);

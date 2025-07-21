@@ -11,7 +11,11 @@ class AddressBookMain {
 
     start(): void {
         this.displayWelcomeMessage();
+        this.addContactFromConsole();
+    }
 
+    private addContactFromConsole(): void {
+        console.log("Add the contact details : ")
         const firstName = readlineSync.question("Enter First Name: ");
         const lastName = readlineSync.question("Enter Last Name: ");
         const address = readlineSync.question("Enter Address: ");
@@ -22,8 +26,13 @@ class AddressBookMain {
         const email = readlineSync.question("Enter Email: ");
 
         const contact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
-
         this.addressBook.addContact(contact);
+
+        const shouldEdit = readlineSync.question("/n ✏️ Do you want to edit this contact now ? (y/n): ")
+        if(shouldEdit.toLowerCase() === "y"){
+            this.addressBook.editContactByName(firstName)
+        }
+        console.log("\n ✅ Contact Updated successfully!\n");
     }
 }
 
