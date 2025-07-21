@@ -30,4 +30,17 @@ export class AddressBook {
         contact.displayContact();
         return true;
     }
+    //* UC4 : Ability to delete the person using a person name
+
+    deleteContactByName(firstName : string ) : boolean {
+        const index = this.contacts.findIndex(
+            (c) => c.firstName.toLowerCase() === firstName.toLowerCase()
+        )
+        if(index == -1 ) {
+            console.log("The contact detail is not found");
+        }
+        const removed = this.contacts.splice(index, 1)[0];
+        console.log(`\n🗑️  Contact "${removed.firstName} ${removed.lastName}" deleted successfully!\n`);
+        return true
+    }
  }

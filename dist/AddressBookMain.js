@@ -29,11 +29,16 @@ class AddressBookMain {
         const email = readline_sync_1.default.question("Enter Email: ");
         const contact = new Contact_1.Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
         this.addressBook.addContact(contact);
-        const shouldEdit = readline_sync_1.default.question("/n ✏️ Do you want to edit this contact now ? (y/n): ");
+        const shouldEdit = readline_sync_1.default.question("Do you want to edit this contact now ? (y/n): ");
         if (shouldEdit.toLowerCase() === "y") {
             this.addressBook.editContactByName(firstName);
+            console.log("\n ✅ Contact Updated successfully!\n");
         }
-        console.log("\n ✅ Contact Updated successfully!\n");
+        const shouldDelete = readline_sync_1.default.question(" Do you want to delete the contact details? (y/n): ");
+        if (shouldDelete.toLowerCase() === "y") {
+            this.addressBook.deleteContactByName(firstName);
+            console.log("\n ✅ Contact deleted successfully!");
+        }
     }
 }
 const app = new AddressBookMain();

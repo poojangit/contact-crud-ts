@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Contact = void 0;
+//* UC1 : Ability to create a contacts
 class Contact {
     constructor(firstName, lastName, address, city, state, zip, phoneNumber, email) {
         this.firstName = firstName;
@@ -13,7 +14,7 @@ class Contact {
         this.email = email;
     }
     displayContact() {
-        console.log("Contact Details : ");
+        console.log("\n Contact Details : ");
         console.log(`👤 Name       : ${this.firstName} ${this.lastName}`);
         console.log(`🏠 Address    : ${this.address}, ${this.city}, ${this.state} - ${this.zip}`);
         console.log(`📞 Phone No.  : ${this.phoneNumber}`);
