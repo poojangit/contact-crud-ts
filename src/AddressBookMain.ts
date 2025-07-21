@@ -1,24 +1,31 @@
+import readlineSync from "readline-sync";
+import { AddressBook } from "./services/AddressBook";
 import { Contact } from "./models/Contact";
+
 class AddressBookMain {
-    displayWelcomeMessage() : void{
+    private addressBook = new AddressBook();
+
+    displayWelcomeMessage(): void {
         console.log("🖐️  Welcome to my Address Book Program");
     }
 
-    start() : void {
-        this.displayWelcomeMessage()
+    start(): void {
+        this.displayWelcomeMessage();
 
-        const contact = new Contact (
-            "Pooja",
-            "N G",
-            "Prathanasa 6/2 , Muthurme, Perdoor", 
-            "Udupi",
-            "Karnataka",
-            576124,
-            78993573577,
-            "Pooja@gmail.com"
-        )
-        contact.displayContact()
+        const firstName = readlineSync.question("Enter First Name: ");
+        const lastName = readlineSync.question("Enter Last Name: ");
+        const address = readlineSync.question("Enter Address: ");
+        const city = readlineSync.question("Enter City: ");
+        const state = readlineSync.question("Enter State: ");
+        const zip = parseInt(readlineSync.question("Enter Zip Code: "));
+        const phoneNumber = parseInt(readlineSync.question("Enter Phone Number: "));
+        const email = readlineSync.question("Enter Email: ");
+
+        const contact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
+
+        this.addressBook.addContact(contact);
     }
 }
-const addressBook = new AddressBookMain()
-addressBook.start()
+
+const app = new AddressBookMain();
+app.start();
