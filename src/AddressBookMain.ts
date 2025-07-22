@@ -4,44 +4,119 @@ import { Contact } from "./models/Contact";
 import { isValidEmail, isValidPhoneNumber, isValidZipCode } from "./utils/validators";
 
 class AddressBookMain {
-    private addressBook = new AddressBook();
+    private addressBooks : Map<string , AddressBook> = new Map(); 
 
     displayWelcomeMessage(): void {
-        console.log("🖐️  Welcome to my Address Book Program");
+        console.log("\n🖐️  Welcome to my Address Book Program");
     }
 
     start(): void {
         this.displayWelcomeMessage();
-        const addressBookName = readlineSync.question("\n Enter a name for your Address book: ")
-        console.log(`\nAddress Book "${addressBookName}" created successfully!!"`)
-        this.addMultipleContactFromConsole();
+        let exit = false
+        while(!exit){
+            console.log(`\n 📚 Main Menu: 
+            1. Add New Address book
+            2. Open Existing Address book
+            3. Exit `);    
+        const choice = readlineSync.question("\nEnter your choice: ")
+        switch(choice) {
+            case "1" : 
+                this.createNewAddressBook()
+                break
+            case "2" : 
+                this.openExistingAddressbook()
+                break
+            case "3" :
+                console.log("\n Exiting the program.....")
+                exit = true
+                break
+            default: 
+                console.warn("\nInvalid Choice! Please enter 1,2 or 3"); 
+            }
+        }
     }
 
-    private displayAllContacts() : void {
-        const allContacts = this.addressBook.getAllContacts()
+    private createNewAddressBook() : void {
+        const name = readlineSync.question("\n Enter a name for the new Address Book:  ")
+        if(this.addressBooks.has(name)){
+            console.log("⚠️ Address Book with this name already exists. Please choose a diffrent name : ");
+        } else {
+            this.addressBooks.set(name, new AddressBook())
+            console.log(`\n✅ Address Book "${name}" created successfully !!`);
+        }
+    }
+
+    private openExistingAddressbook() : void {
+        if(this.addressBooks.size === 0){
+            console.log("\n⚠️  No Address Books available. Please create one first.");
+            return
+        }
+        console.log("\n📚 Available Address Books:");
+        let index = 1
+        for(const name of this.addressBooks.keys()){
+            console.log(`${index++}. ${name}`);
+        }
+        
+        const name = readlineSync.question("\nEnter the name of the Address to open: ")
+        const addressBook = this.addressBooks.get(name.trim())
+
+        if(!addressBook){
+            console.log("Address Book not found.");
+            return
+        }
+        let backToMainMenu = false
+        while(!backToMainMenu){
+            console.log(`\n📖 Address Book: "${name}"
+            1. Add Contact
+            2. Edit contact
+            3. Delete Contact 
+            4. Display all contacts
+            5. Back to Main Menu`);
+
+            const option = readlineSync.question(" Choose an option: ")
+            switch(option) {
+                case "1" : 
+                    this.addMultipleContactFromConsole(addressBook)
+                    break;
+                case "2" : 
+                    const nameToEdit = readlineSync.question("Enter First Name of the contact to edit: ")
+                    if(this.displayAllContacts.length === 0){
+                       console.log("\n⚠️ No contacts found");
+                    }
+                    addressBook.editContactByName(nameToEdit)
+                    break;
+                case "3" :
+                    const nameToDelete = readlineSync.question("Enter First Name of the Contact to delete: ")
+                    addressBook.deleteContactByName(nameToDelete)
+                    break;
+                case "4" :
+                    this.displayAllContacts(addressBook)
+                    break;
+                case "5" :
+                    backToMainMenu = true
+                    break;
+                default:
+                    console.warn("Invalid option. Choose between 1-5.");  
+            }
+        }
+    }
+    private displayAllContacts(addressBook : AddressBook) : void {
+        const allContacts = addressBook.getAllContacts()
         console.log("\n📒 All Contacts in Address Book:");
         if(allContacts.length === 0){
-            console.log("No contacts found");
+            console.log("\n⚠️  No contacts found");
         } else {
             allContacts.forEach((contact, index) => {
                 console.log(`\n Contact #${index+1}`);
                 contact.displayContact()
             })
         }
-        
     }
-    private addMultipleContactFromConsole(): void {
+    private addMultipleContactFromConsole(addressBook : AddressBook): void {
     //* UC5 - Ability to add multiple person to Address Book
-    let continueAdding = true;
-
-    while (continueAdding) {
-        const shouldAdd = readlineSync.question("\n Do you want to add a new contact? (y/n): ");
-        if (shouldAdd.toLowerCase() !== "y") {
-            continueAdding = false;
-            break;
-        }
 
         console.log("\n📝 Add the contact details:");
+
         const firstName = readlineSync.question("Enter First Name: ");
         const lastName = readlineSync.question("Enter Last Name: ");
         const address = readlineSync.question("Enter Address: ");
@@ -64,24 +139,10 @@ class AddressBookMain {
         }
         
         const contact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
-        this.addressBook.addContact(contact);
-
-        //* UC3 - Ability to edit existing contact
-        const shouldEdit = readlineSync.question("\nDo you want to edit this contact now? (y/n): ");
-        if (shouldEdit.toLowerCase() === "y") {
-            this.addressBook.editContactByName(firstName);
-        }
-
-        //* UC4 - Ability to delete the contact
-        const shouldDelete = readlineSync.question("\nDo you want to delete this contact? (y/n): ");
-        if (shouldDelete.toLowerCase() === "y") {
-            this.addressBook.deleteContactByName(firstName);
-        }
+        addressBook.addContact(contact);
     }
-    this.displayAllContacts();
 }
 
-}
 const app = new AddressBookMain();
 app.start();
 
