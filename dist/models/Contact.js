@@ -14,7 +14,7 @@ class Contact {
         this.email = email;
     }
     displayContact() {
-        console.log("\n Contact Details : ");
+        console.log("\nContact Details : ");
         console.log(`👤 Name       : ${this.firstName} ${this.lastName}`);
         console.log(`🏠 Address    : ${this.address}, ${this.city}, ${this.state} - ${this.zip}`);
         console.log(`📞 Phone No.  : ${this.phoneNumber}`);

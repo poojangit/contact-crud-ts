@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const readline_sync_1 = __importDefault(require("readline-sync"));
 const AddressBook_1 = require("./services/AddressBook");
 const Contact_1 = require("./models/Contact");
+const validators_1 = require("./utils/validators");
 class AddressBookMain {
     constructor() {
         this.addressBook = new AddressBook_1.AddressBook();
@@ -47,18 +48,28 @@ class AddressBookMain {
             const address = readline_sync_1.default.question("Enter Address: ");
             const city = readline_sync_1.default.question("Enter City: ");
             const state = readline_sync_1.default.question("Enter State: ");
-            const zip = parseInt(readline_sync_1.default.question("Enter Zip Code: "));
-            const phoneNumber = parseInt(readline_sync_1.default.question("Enter Phone Number: "));
-            const email = readline_sync_1.default.question("Enter Email: ");
+            //* Additional implementation - Regex validations for zip, phonenumber and email
+            let zip = parseInt(readline_sync_1.default.question("Enter new Zip Code: "));
+            while (!(0, validators_1.isValidZipCode)(zip)) {
+                zip = parseInt(readline_sync_1.default.question("Invalid zip. Enter a correct zip code : --> "));
+            }
+            let phoneNumber = parseInt(readline_sync_1.default.question("Enter new Phone Number: "));
+            while (!(0, validators_1.isValidPhoneNumber)(phoneNumber)) {
+                phoneNumber = parseInt(readline_sync_1.default.question("Invalid Phone number. Enter a Valid 10 digit Phone number : --> "));
+            }
+            let email = readline_sync_1.default.question("Enter new Email: ");
+            while (!(0, validators_1.isValidEmail)(email)) {
+                email = readline_sync_1.default.question("Invalid email. Enter a valid email : --> ");
+            }
             const contact = new Contact_1.Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
             this.addressBook.addContact(contact);
             //* UC3 - Ability to edit existing contact
-            const shouldEdit = readline_sync_1.default.question(" Do you want to edit this contact now? (y/n): ");
+            const shouldEdit = readline_sync_1.default.question("\nDo you want to edit this contact now? (y/n): ");
             if (shouldEdit.toLowerCase() === "y") {
                 this.addressBook.editContactByName(firstName);
             }
             //* UC4 - Ability to delete the contact
-            const shouldDelete = readline_sync_1.default.question(" Do you want to delete this contact? (y/n): ");
+            const shouldDelete = readline_sync_1.default.question("\nDo you want to delete this contact? (y/n): ");
             if (shouldDelete.toLowerCase() === "y") {
                 this.addressBook.deleteContactByName(firstName);
             }

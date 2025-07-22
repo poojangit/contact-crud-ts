@@ -1,5 +1,7 @@
 import readlineSync from "readline-sync";
 import { Contact } from "../models/Contact"
+import { isValidEmail, isValidPhoneNumber, isValidZipCode } from "../utils/validators";
+
 export class AddressBook {
     private contacts : Contact[] = []
     //* UC2 : Ability to add a new Contact to Address Book
@@ -23,9 +25,22 @@ export class AddressBook {
         contact.address = readlineSync.question("Enter new Address: ");
         contact.city = readlineSync.question("Enter new City: ");
         contact.state = readlineSync.question("Enter new State: ");
-        contact.zip = parseInt(readlineSync.question("Enter new Zip Code: "));
-        contact.phoneNumber = parseInt(readlineSync.question("Enter new Phone Number: "));
-        contact.email = readlineSync.question("Enter new Email: ");
+
+        //* Additional implementation - Regex validations for zip, phonenumber and email
+        let zip = parseInt(readlineSync.question("Enter new Zip Code: "));
+        while(!isValidZipCode(zip)){
+            zip = parseInt(readlineSync.question("Invalid zip. Enter a correct zip code"))
+        }
+        contact.zip = zip
+
+        let phone = parseInt(readlineSync.question("Enter new Phone Number: "));
+        while(!isValidPhoneNumber(phone)) {
+            phone = parseInt(readlineSync.question("Invalid Phone number. Enter a Valid one !"))
+        }
+        let email = readlineSync.question("Enter new Email: ");
+        while(!isValidEmail(email)){
+            email = readlineSync.question("Invalid email. Enter a valid email : ")
+        }
         console.log("\n✅ Contact updated successfully!");
         contact.displayContact();
         return true;

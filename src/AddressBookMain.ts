@@ -1,6 +1,7 @@
 import readlineSync from "readline-sync";
 import { AddressBook } from "./services/AddressBook";
 import { Contact } from "./models/Contact";
+import { isValidEmail, isValidPhoneNumber, isValidZipCode } from "./utils/validators";
 
 class AddressBookMain {
     private addressBook = new AddressBook();
@@ -46,21 +47,33 @@ class AddressBookMain {
         const address = readlineSync.question("Enter Address: ");
         const city = readlineSync.question("Enter City: ");
         const state = readlineSync.question("Enter State: ");
-        const zip = parseInt(readlineSync.question("Enter Zip Code: "));
-        const phoneNumber = parseInt(readlineSync.question("Enter Phone Number: "));
-        const email = readlineSync.question("Enter Email: ");
 
+         //* Additional implementation - Regex validations for zip, phonenumber and email
+        let zip = parseInt(readlineSync.question("Enter new Zip Code: "));
+        while(!isValidZipCode(zip)){
+            zip = parseInt(readlineSync.question("Invalid zip. Enter a correct zip code : --> "))
+        }
+
+        let phoneNumber = parseInt(readlineSync.question("Enter new Phone Number: "));
+        while(!isValidPhoneNumber(phoneNumber)) {
+            phoneNumber = parseInt(readlineSync.question("Invalid Phone number. Enter a Valid 10 digit Phone number : --> "))
+        }
+        let email = readlineSync.question("Enter new Email: ");
+        while(!isValidEmail(email)){
+            email = readlineSync.question("Invalid email. Enter a valid email : --> ")
+        }
+        
         const contact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
         this.addressBook.addContact(contact);
 
         //* UC3 - Ability to edit existing contact
-        const shouldEdit = readlineSync.question(" Do you want to edit this contact now? (y/n): ");
+        const shouldEdit = readlineSync.question("\nDo you want to edit this contact now? (y/n): ");
         if (shouldEdit.toLowerCase() === "y") {
             this.addressBook.editContactByName(firstName);
         }
 
         //* UC4 - Ability to delete the contact
-        const shouldDelete = readlineSync.question(" Do you want to delete this contact? (y/n): ");
+        const shouldDelete = readlineSync.question("\nDo you want to delete this contact? (y/n): ");
         if (shouldDelete.toLowerCase() === "y") {
             this.addressBook.deleteContactByName(firstName);
         }

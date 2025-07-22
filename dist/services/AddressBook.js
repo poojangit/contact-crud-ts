@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AddressBook = void 0;
 const readline_sync_1 = __importDefault(require("readline-sync"));
+const validators_1 = require("../utils/validators");
 class AddressBook {
     constructor() {
         this.contacts = [];
@@ -30,9 +31,20 @@ class AddressBook {
         contact.address = readline_sync_1.default.question("Enter new Address: ");
         contact.city = readline_sync_1.default.question("Enter new City: ");
         contact.state = readline_sync_1.default.question("Enter new State: ");
-        contact.zip = parseInt(readline_sync_1.default.question("Enter new Zip Code: "));
-        contact.phoneNumber = parseInt(readline_sync_1.default.question("Enter new Phone Number: "));
-        contact.email = readline_sync_1.default.question("Enter new Email: ");
+        //* Additional implementation - Regex validations for zip, phonenumber and email
+        let zip = parseInt(readline_sync_1.default.question("Enter new Zip Code: "));
+        while (!(0, validators_1.isValidZipCode)(zip)) {
+            zip = parseInt(readline_sync_1.default.question("Invalid zip. Enter a correct zip code"));
+        }
+        contact.zip = zip;
+        let phone = parseInt(readline_sync_1.default.question("Enter new Phone Number: "));
+        while (!(0, validators_1.isValidPhoneNumber)(phone)) {
+            phone = parseInt(readline_sync_1.default.question("Invalid Phone number. Enter a Valid one !"));
+        }
+        let email = readline_sync_1.default.question("Enter new Email: ");
+        while (!(0, validators_1.isValidEmail)(email)) {
+            email = readline_sync_1.default.question("Invalid email. Enter a valid email : ");
+        }
         console.log("\n✅ Contact updated successfully!");
         contact.displayContact();
         return true;
