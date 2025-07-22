@@ -15,30 +15,55 @@ class AddressBookMain {
     }
     start() {
         this.displayWelcomeMessage();
-        this.addContactFromConsole();
+        const addressBookName = readline_sync_1.default.question("\n Enter a name for your Address book: ");
+        console.log(`\nAddress Book "${addressBookName}" created successfully!!"`);
+        this.addMultipleContactFromConsole();
     }
-    addContactFromConsole() {
-        console.log("Add the contact details : ");
-        const firstName = readline_sync_1.default.question("Enter First Name: ");
-        const lastName = readline_sync_1.default.question("Enter Last Name: ");
-        const address = readline_sync_1.default.question("Enter Address: ");
-        const city = readline_sync_1.default.question("Enter City: ");
-        const state = readline_sync_1.default.question("Enter State: ");
-        const zip = parseInt(readline_sync_1.default.question("Enter Zip Code: "));
-        const phoneNumber = parseInt(readline_sync_1.default.question("Enter Phone Number: "));
-        const email = readline_sync_1.default.question("Enter Email: ");
-        const contact = new Contact_1.Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
-        this.addressBook.addContact(contact);
-        const shouldEdit = readline_sync_1.default.question("Do you want to edit this contact now ? (y/n): ");
-        if (shouldEdit.toLowerCase() === "y") {
-            this.addressBook.editContactByName(firstName);
-            console.log("\n ✅ Contact Updated successfully!\n");
+    displayAllContacts() {
+        const allContacts = this.addressBook.getAllContacts();
+        console.log("\n📒 All Contacts in Address Book:");
+        if (allContacts.length === 0) {
+            console.log("No contacts found");
         }
-        const shouldDelete = readline_sync_1.default.question(" Do you want to delete the contact details? (y/n): ");
-        if (shouldDelete.toLowerCase() === "y") {
-            this.addressBook.deleteContactByName(firstName);
-            console.log("\n ✅ Contact deleted successfully!");
+        else {
+            allContacts.forEach((contact, index) => {
+                console.log(`\n Contact #${index + 1}`);
+                contact.displayContact();
+            });
         }
+    }
+    addMultipleContactFromConsole() {
+        //* UC5 - Ability to add multiple person to Address Book
+        let continueAdding = true;
+        while (continueAdding) {
+            const shouldAdd = readline_sync_1.default.question("\n Do you want to add a new contact? (y/n): ");
+            if (shouldAdd.toLowerCase() !== "y") {
+                continueAdding = false;
+                break;
+            }
+            console.log("\n📝 Add the contact details:");
+            const firstName = readline_sync_1.default.question("Enter First Name: ");
+            const lastName = readline_sync_1.default.question("Enter Last Name: ");
+            const address = readline_sync_1.default.question("Enter Address: ");
+            const city = readline_sync_1.default.question("Enter City: ");
+            const state = readline_sync_1.default.question("Enter State: ");
+            const zip = parseInt(readline_sync_1.default.question("Enter Zip Code: "));
+            const phoneNumber = parseInt(readline_sync_1.default.question("Enter Phone Number: "));
+            const email = readline_sync_1.default.question("Enter Email: ");
+            const contact = new Contact_1.Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
+            this.addressBook.addContact(contact);
+            //* UC3 - Ability to edit existing contact
+            const shouldEdit = readline_sync_1.default.question(" Do you want to edit this contact now? (y/n): ");
+            if (shouldEdit.toLowerCase() === "y") {
+                this.addressBook.editContactByName(firstName);
+            }
+            //* UC4 - Ability to delete the contact
+            const shouldDelete = readline_sync_1.default.question(" Do you want to delete this contact? (y/n): ");
+            if (shouldDelete.toLowerCase() === "y") {
+                this.addressBook.deleteContactByName(firstName);
+            }
+        }
+        this.displayAllContacts();
     }
 }
 const app = new AddressBookMain();
