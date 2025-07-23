@@ -8,7 +8,13 @@ class AddressBook {
         this.contacts = [];
     }
     //* UC2 : Ability to add a new Contact to Address Book
+    //* Uc7 : Ability to ensure there is no dublicate entry of the same person in a particular Address Book
     addContact(contact) {
+        const isDublicate = this.contacts.some((c) => c.equals(contact));
+        if (isDublicate) {
+            console.log(`\n❌ Dublicate contact! "${contact.firstName} ${contact.lastName}" Already exists in the Address Book! "`);
+            return;
+        }
         this.contacts.push(contact);
         console.log("\n ✅ Contact added successfully!\n");
     }

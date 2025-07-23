@@ -18,4 +18,13 @@ export class Contact {
         console.log(`📞 Phone No.  : ${this.phoneNumber}`);
         console.log(`📧 Email      : ${this.email}`);
     }
+
+    //* UC7 - Compare two contacts for equality (based on first and last name)
+
+    equals(other: Contact): boolean {
+        return (
+            this.firstName.toLowerCase() === other.firstName.toLowerCase() &&
+            this.lastName.toLowerCase() === other.lastName.toLowerCase() 
+        )
+    }
 }
