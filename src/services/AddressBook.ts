@@ -74,6 +74,15 @@ export class AddressBook {
         console.log(`\n🗑️  Contact "${removed.firstName} ${removed.lastName}" deleted successfully!\n`);
         return true
     }
+    //* UC8 : Ability to search person in a city or state accross the multiple book
+
+    searchByCity(city: string): Contact[] {
+        return this.contacts.filter(c => c.city.toLowerCase() === city.toLowerCase());
+    }
+
+    searchByState(state: string): Contact[] {
+        return this.contacts.filter(c => c.state.toLowerCase() === state.toLowerCase());
+    }
  }
 
 

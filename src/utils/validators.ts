@@ -12,7 +12,7 @@ export function isValidName(name: string): boolean {
 export function isValidAddress(address: string): boolean {
     return /^[a-zA-Z0-9\s,.'-]{3,}$/.test(address); // Allows letters, numbers, spaces & punctuation
 }
-``
+
 export function isValidCityOrState(value: string): boolean {
     return /^[A-Za-z\s]{2,}$/.test(value); // Letters only, min length 2
 }

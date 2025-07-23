@@ -2,6 +2,7 @@ import { AddressBook } from "../services/AddressBook";
 import { AddressBookManager } from "../managers/AddressBookManager";
 import { getInput } from "../utils/input";
 import { isValidAddressBookName } from "../utils/validators";
+import { Contact } from "../models/Contact";
 
 export class AddressBookMain {
     private addressBooks : Map<string , AddressBook> = new Map(); 
@@ -17,7 +18,8 @@ export class AddressBookMain {
             console.log(`\n 📚 Main Menu: 
             1. Add New Address book
             2. Open Existing Address book
-            3. Exit `);    
+            3. Search person by City/State
+            4. Exit `);    
         const choice = getInput("\nEnter your choice: ")
         switch(choice) {
             case "1" : 
@@ -27,6 +29,9 @@ export class AddressBookMain {
                 this.openExistingAddressBook();
                 break;
             case "3" :
+                this.searchAcrossAddressBooks()
+                break;
+            case "4" :
                 console.log("\n Exiting the program.....")
                 exit = true
                 break
@@ -73,6 +78,58 @@ export class AddressBookMain {
         const manager = new AddressBookManager(addressBook, name);
         manager.manage();
     }
+    private searchAcrossAddressBooks(): void {
+    if (this.addressBooks.size === 0) {
+        console.log("\n⚠️ No Address Books available.");
+        return;
+    }
+
+    console.log(`
+    🔍 Search Menu:
+    1. Search by City
+    2. Search by State
+    3. Back to Main Menu
+    `);
+
+    const choice = getInput("Choose an option: ");
+    let searchTerm: string;
+    let results: { bookName: string; contact: Contact }[] = [];
+
+    switch (choice) {
+        case "1": // Search by city
+            searchTerm = getInput("\nEnter City to search: ");
+            this.addressBooks.forEach((book, name) => {
+                const matches = book.searchByCity(searchTerm);
+                matches.forEach(contact => results.push({ bookName: name, contact }));
+            });
+            break;
+
+        case "2": // Search by state
+            searchTerm = getInput("\nEnter State to search: ");
+            this.addressBooks.forEach((book, name) => {
+                const matches = book.searchByState(searchTerm);
+                matches.forEach(contact => results.push({ bookName: name, contact }));
+            });
+            break;
+
+        case "3":
+            return;
+
+        default:
+            console.log("❌ Invalid option. Returning to main menu.");
+            return;
+    }
+
+    if (results.length === 0) {
+        console.log(`\n❌ No contacts found for "${searchTerm}".`);
+    } else {
+        console.log(`\n🔍 Found ${results.length} contact(s) for "${searchTerm}":`);
+        results.forEach((r, index) => {
+            console.log(`\n[${index + 1}] Address Book: ${r.bookName}`);
+            r.contact.displayContact();
+        });
+    }
+}
 }
 
 
