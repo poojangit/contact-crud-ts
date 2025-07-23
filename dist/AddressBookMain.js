@@ -1,11 +1,8 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const readline_sync_1 = __importDefault(require("readline-sync"));
 const AddressBook_1 = require("./services/AddressBook");
 const AddressBookManager_1 = require("./managers/AddressBookManager");
+const input_1 = require("./utils/input");
 class AddressBookMain {
     constructor() {
         this.addressBooks = new Map();
@@ -21,7 +18,7 @@ class AddressBookMain {
             1. Add New Address book
             2. Open Existing Address book
             3. Exit `);
-            const choice = readline_sync_1.default.question("\nEnter your choice: ");
+            const choice = (0, input_1.getInput)("\nEnter your choice: ");
             switch (choice) {
                 case "1":
                     this.createNewAddressBook();
@@ -39,7 +36,7 @@ class AddressBookMain {
         }
     }
     createNewAddressBook() {
-        const name = readline_sync_1.default.question("\nEnter a name for the new Address Book: ");
+        const name = (0, input_1.getInput)("\nEnter a name for the new Address Book: ");
         if (this.addressBooks.has(name)) {
             console.log("⚠️ Address Book already exists. Choose a different name.");
         }
@@ -57,7 +54,7 @@ class AddressBookMain {
         [...this.addressBooks.keys()].forEach((name, index) => {
             console.log(`${index + 1}. ${name}`);
         });
-        const name = readline_sync_1.default.question("\nEnter the name of the Address Book to open: ");
+        const name = (0, input_1.getInput)("\nEnter the name of the Address Book to open: ");
         const addressBook = this.addressBooks.get(name.trim());
         if (!addressBook) {
             console.log("❌ Address Book not found.");

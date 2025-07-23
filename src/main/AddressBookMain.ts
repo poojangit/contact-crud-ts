@@ -1,8 +1,8 @@
-import readlineSync from "readline-sync";
-import { AddressBook } from "./services/AddressBook";
-import { AddressBookManager } from "./managers/AddressBookManager";
+import { AddressBook } from "../services/AddressBook";
+import { AddressBookManager } from "../managers/AddressBookManager";
+import { getInput } from "../utils/input";
 
-class AddressBookMain {
+export class AddressBookMain {
     private addressBooks : Map<string , AddressBook> = new Map(); 
 
     displayWelcomeMessage(): void {
@@ -17,7 +17,7 @@ class AddressBookMain {
             1. Add New Address book
             2. Open Existing Address book
             3. Exit `);    
-        const choice = readlineSync.question("\nEnter your choice: ")
+        const choice = getInput("\nEnter your choice: ")
         switch(choice) {
             case "1" : 
                 this.createNewAddressBook()
@@ -36,7 +36,7 @@ class AddressBookMain {
     }
 
      private createNewAddressBook(): void {
-        const name = readlineSync.question("\nEnter a name for the new Address Book: ");
+        const name = getInput("\nEnter a name for the new Address Book: ");
         if (this.addressBooks.has(name)) {
             console.log("⚠️ Address Book already exists. Choose a different name.");
         } else {
@@ -56,7 +56,7 @@ class AddressBookMain {
             console.log(`${index + 1}. ${name}`);
         });
 
-        const name = readlineSync.question("\nEnter the name of the Address Book to open: ");
+        const name = getInput("\nEnter the name of the Address Book to open: ");
         const addressBook = this.addressBooks.get(name.trim());
 
         if (!addressBook) {
@@ -68,7 +68,5 @@ class AddressBookMain {
         manager.manage();
     }
 }
-const app = new AddressBookMain();
-app.start();
 
 

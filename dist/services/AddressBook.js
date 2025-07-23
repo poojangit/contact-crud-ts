@@ -1,11 +1,8 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AddressBook = void 0;
-const readline_sync_1 = __importDefault(require("readline-sync"));
 const validators_1 = require("../utils/validators");
+const input_1 = require("../utils/input");
 class AddressBook {
     constructor() {
         this.contacts = [];
@@ -14,7 +11,6 @@ class AddressBook {
     addContact(contact) {
         this.contacts.push(contact);
         console.log("\n ✅ Contact added successfully!\n");
-        contact.displayContact();
     }
     getAllContacts() {
         return this.contacts;
@@ -27,23 +23,23 @@ class AddressBook {
             return false;
         }
         console.log(`\n 📝 Editing contact for: ${contact.firstName} ${contact.lastName}`);
-        contact.lastName = readline_sync_1.default.question("Enter new Last Name: ");
-        contact.address = readline_sync_1.default.question("Enter new Address: ");
-        contact.city = readline_sync_1.default.question("Enter new City: ");
-        contact.state = readline_sync_1.default.question("Enter new State: ");
+        contact.lastName = (0, input_1.getInput)("Enter new Last Name: ");
+        contact.address = (0, input_1.getInput)("Enter new Address: ");
+        contact.city = (0, input_1.getInput)("Enter new City: ");
+        contact.state = (0, input_1.getInput)("Enter new State: ");
         //* Additional implementation - Regex validations for zip, phonenumber and email
-        let zip = parseInt(readline_sync_1.default.question("Enter new Zip Code: "));
+        let zip = parseInt((0, input_1.getInput)("Enter new Zip Code: "));
         while (!(0, validators_1.isValidZipCode)(zip)) {
-            zip = parseInt(readline_sync_1.default.question("Invalid zip. Enter a correct zip code"));
+            zip = parseInt((0, input_1.getInput)("Invalid zip. Enter a correct zip code"));
         }
         contact.zip = zip;
-        let phone = parseInt(readline_sync_1.default.question("Enter new Phone Number: "));
+        let phone = parseInt((0, input_1.getInput)("Enter new Phone Number: "));
         while (!(0, validators_1.isValidPhoneNumber)(phone)) {
-            phone = parseInt(readline_sync_1.default.question("Invalid Phone number. Enter a Valid one !"));
+            phone = parseInt((0, input_1.getInput)("Invalid Phone number. Enter a Valid one !"));
         }
-        let email = readline_sync_1.default.question("Enter new Email: ");
+        let email = (0, input_1.getInput)("Enter new Email: ");
         while (!(0, validators_1.isValidEmail)(email)) {
-            email = readline_sync_1.default.question("Invalid email. Enter a valid email : ");
+            email = (0, input_1.getInput)("Invalid email. Enter a valid email : ");
         }
         console.log("\n✅ Contact updated successfully!");
         contact.displayContact();

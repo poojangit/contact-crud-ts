@@ -1,6 +1,6 @@
-import readlineSync from "readline-sync";
 import { Contact } from "../models/Contact"
 import { isValidEmail, isValidPhoneNumber, isValidZipCode } from "../utils/validators";
+import { getInput } from "../utils/input";
 
 export class AddressBook {
     private contacts : Contact[] = []
@@ -20,25 +20,25 @@ export class AddressBook {
             return false;
         }
        console.log(`\n 📝 Editing contact for: ${contact.firstName} ${contact.lastName}`);
-        contact.lastName = readlineSync.question("Enter new Last Name: ");
-        contact.address = readlineSync.question("Enter new Address: ");
-        contact.city = readlineSync.question("Enter new City: ");
-        contact.state = readlineSync.question("Enter new State: ");
+        contact.lastName = getInput("Enter new Last Name: ");
+        contact.address = getInput("Enter new Address: ");
+        contact.city = getInput("Enter new City: ");
+        contact.state = getInput("Enter new State: ");
 
         //* Additional implementation - Regex validations for zip, phonenumber and email
-        let zip = parseInt(readlineSync.question("Enter new Zip Code: "));
+        let zip = parseInt(getInput("Enter new Zip Code: "));
         while(!isValidZipCode(zip)){
-            zip = parseInt(readlineSync.question("Invalid zip. Enter a correct zip code"))
+            zip = parseInt(getInput("Invalid zip. Enter a correct zip code"))
         }
         contact.zip = zip
 
-        let phone = parseInt(readlineSync.question("Enter new Phone Number: "));
+        let phone = parseInt(getInput("Enter new Phone Number: "));
         while(!isValidPhoneNumber(phone)) {
-            phone = parseInt(readlineSync.question("Invalid Phone number. Enter a Valid one !"))
+            phone = parseInt(getInput("Invalid Phone number. Enter a Valid one !"))
         }
-        let email = readlineSync.question("Enter new Email: ");
+        let email = getInput("Enter new Email: ");
         while(!isValidEmail(email)){
-            email = readlineSync.question("Invalid email. Enter a valid email : ")
+            email = getInput("Invalid email. Enter a valid email : ")
         }
         console.log("\n✅ Contact updated successfully!");
         contact.displayContact();
