@@ -23,24 +23,27 @@ class AddressBook {
             return false;
         }
         console.log(`\n 📝 Editing contact for: ${contact.firstName} ${contact.lastName}`);
-        contact.lastName = (0, input_1.getInput)("Enter new Last Name: ");
-        contact.address = (0, input_1.getInput)("Enter new Address: ");
-        contact.city = (0, input_1.getInput)("Enter new City: ");
-        contact.state = (0, input_1.getInput)("Enter new State: ");
-        //* Additional implementation - Regex validations for zip, phonenumber and email
-        let zip = parseInt((0, input_1.getInput)("Enter new Zip Code: "));
-        while (!(0, validators_1.isValidZipCode)(zip)) {
-            zip = parseInt((0, input_1.getInput)("Invalid zip. Enter a correct zip code"));
-        }
+        console.log("(Press Enter to keep the current value)");
+        // If user presses Enter → keep old value
+        const lastName = (0, input_1.getInput)(`Enter new Last Name [${contact.lastName}]: `, validators_1.isValidName, "❌ Invalid name. Must start with uppercase & have at least 2 letters.", true) || contact.lastName;
+        const address = (0, input_1.getInput)(`Enter new Address [${contact.address}]: `, validators_1.isValidAddress, "❌ Invalid address. Must be at least 3 characters.", true) || contact.address;
+        const city = (0, input_1.getInput)(`Enter new City [${contact.city}]: `, validators_1.isValidCityOrState, "❌ Invalid city. Must be at least 3 characters.", true) || contact.city;
+        const state = (0, input_1.getInput)(`Enter new State [${contact.state}]: `, validators_1.isValidCityOrState, "❌ Invalid state. Must be at least 3 characters.", true) || contact.state;
+        let zip = (0, input_1.getNumericInput)(`Enter new Zip Code [${contact.zip}]: `, validators_1.isValidZipCode, "❌ Invalid zip. Must be 5-6 digits.", true);
+        if (!zip)
+            zip = contact.zip;
+        let phone = (0, input_1.getNumericInput)(`Enter new Phone Number [${contact.phoneNumber}]: `, validators_1.isValidPhoneNumber, "❌ Invalid phone. Must be 10 digits starting with 6-9.", true);
+        if (!phone)
+            phone = contact.phoneNumber;
+        const email = (0, input_1.getInput)(`Enter new Email [${contact.email}]: `, validators_1.isValidEmail, "❌ Invalid email format.", true) || contact.email;
+        // Update the contact
+        contact.lastName = lastName;
+        contact.address = address;
+        contact.city = city;
+        contact.state = state;
         contact.zip = zip;
-        let phone = parseInt((0, input_1.getInput)("Enter new Phone Number: "));
-        while (!(0, validators_1.isValidPhoneNumber)(phone)) {
-            phone = parseInt((0, input_1.getInput)("Invalid Phone number. Enter a Valid one !"));
-        }
-        let email = (0, input_1.getInput)("Enter new Email: ");
-        while (!(0, validators_1.isValidEmail)(email)) {
-            email = (0, input_1.getInput)("Invalid email. Enter a valid email : ");
-        }
+        contact.phoneNumber = phone;
+        contact.email = email;
         console.log("\n✅ Contact updated successfully!");
         contact.displayContact();
         return true;

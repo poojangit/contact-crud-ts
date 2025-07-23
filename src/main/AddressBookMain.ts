@@ -1,6 +1,7 @@
 import { AddressBook } from "../services/AddressBook";
 import { AddressBookManager } from "../managers/AddressBookManager";
 import { getInput } from "../utils/input";
+import { isValidAddressBookName } from "../utils/validators";
 
 export class AddressBookMain {
     private addressBooks : Map<string , AddressBook> = new Map(); 
@@ -35,8 +36,12 @@ export class AddressBookMain {
         }
     }
 
-     private createNewAddressBook(): void {
-        const name = getInput("\nEnter a name for the new Address Book: ");
+      private createNewAddressBook(): void {
+        const name = getInput(
+            "\nEnter a name for the new Address Book: ",
+            isValidAddressBookName,
+            "❌ Invalid name. Must start with uppercase and have at least 3 letters."
+        );
         if (this.addressBooks.has(name)) {
             console.log("⚠️ Address Book already exists. Choose a different name.");
         } else {
@@ -44,6 +49,7 @@ export class AddressBookMain {
             console.log(`\n✅ Address Book "${name}" created successfully!`);
         }
     }
+
 
    private openExistingAddressBook(): void {
         if (this.addressBooks.size === 0) {

@@ -1,9 +1,10 @@
 import { Contact } from "../models/Contact"
-import { isValidEmail, isValidPhoneNumber, isValidZipCode } from "../utils/validators";
-import { getInput } from "../utils/input";
+import { isValidEmail, isValidAddress, isValidCityOrState, isValidName, isValidPhoneNumber, isValidZipCode } from "../utils/validators";
+import { getInput , getNumericInput} from "../utils/input";
 
 export class AddressBook {
     private contacts : Contact[] = []
+
     //* UC2 : Ability to add a new Contact to Address Book
     addContact(contact : Contact) : void {
         this.contacts.push(contact)
@@ -12,40 +13,47 @@ export class AddressBook {
     getAllContacts() : Contact[] {
         return this.contacts
     }
+
     //* UC3: Ability to edit an existing contact using their name via console input. 
-    editContactByName(firstName: string) : boolean {
-        const contact = this.contacts.find(c => c.firstName.toLowerCase() === firstName.toLowerCase())
-        if(!contact){
+    editContactByName(firstName: string): boolean {
+        const contact = this.contacts.find(c => c.firstName.toLowerCase() === firstName.toLowerCase());
+        if (!contact) {
             console.log(`❌ Contact with name "${firstName}" not found.`);
             return false;
         }
-       console.log(`\n 📝 Editing contact for: ${contact.firstName} ${contact.lastName}`);
-        contact.lastName = getInput("Enter new Last Name: ");
-        contact.address = getInput("Enter new Address: ");
-        contact.city = getInput("Enter new City: ");
-        contact.state = getInput("Enter new State: ");
 
-        //* Additional implementation - Regex validations for zip, phonenumber and email
-        let zip = parseInt(getInput("Enter new Zip Code: "));
-        while(!isValidZipCode(zip)){
-            zip = parseInt(getInput("Invalid zip. Enter a correct zip code"))
-        }
-        contact.zip = zip
+        console.log(`\n 📝 Editing contact for: ${contact.firstName} ${contact.lastName}`);
+        console.log("(Press Enter to keep the current value)");
 
-        let phone = parseInt(getInput("Enter new Phone Number: "));
-        while(!isValidPhoneNumber(phone)) {
-            phone = parseInt(getInput("Invalid Phone number. Enter a Valid one !"))
-        }
-        let email = getInput("Enter new Email: ");
-        while(!isValidEmail(email)){
-            email = getInput("Invalid email. Enter a valid email : ")
-        }
+        // If user presses Enter → keep old value
+        const lastName = getInput(`Enter new Last Name [${contact.lastName}]: `, isValidName, "❌ Invalid name. Must start with uppercase & have at least 2 letters.", true) || contact.lastName;
+        const address = getInput(`Enter new Address [${contact.address}]: `, isValidAddress, "❌ Invalid address. Must be at least 3 characters.", true) || contact.address;
+        const city = getInput(`Enter new City [${contact.city}]: `, isValidCityOrState, "❌ Invalid city. Must be at least 3 characters.", true) || contact.city;
+        const state = getInput(`Enter new State [${contact.state}]: `, isValidCityOrState, "❌ Invalid state. Must be at least 3 characters.", true) || contact.state;
+
+        let zip = getNumericInput(`Enter new Zip Code [${contact.zip}]: `, isValidZipCode, "❌ Invalid zip. Must be 5-6 digits.", true);
+        if (!zip) zip = contact.zip;
+
+        let phone = getNumericInput(`Enter new Phone Number [${contact.phoneNumber}]: `, isValidPhoneNumber, "❌ Invalid phone. Must be 10 digits starting with 6-9.", true);
+        if (!phone) phone = contact.phoneNumber;
+
+        const email = getInput(`Enter new Email [${contact.email}]: `, isValidEmail, "❌ Invalid email format.", true) || contact.email;
+
+        // Update the contact
+        contact.lastName = lastName;
+        contact.address = address;
+        contact.city = city;
+        contact.state = state;
+        contact.zip = zip;
+        contact.phoneNumber = phone;
+        contact.email = email;
+
         console.log("\n✅ Contact updated successfully!");
         contact.displayContact();
         return true;
     }
-    //* UC4 : Ability to delete the person using a person name
 
+    //* UC4 : Ability to delete the person using a person name
     deleteContactByName(firstName : string ) : boolean {
         const index = this.contacts.findIndex(
             (c) => c.firstName.toLowerCase() === firstName.toLowerCase()
