@@ -83,6 +83,32 @@ export class AddressBook {
     searchByState(state: string): Contact[] {
         return this.contacts.filter(c => c.state.toLowerCase() === state.toLowerCase());
     }
+
+    //* UC9 : Ability to view Persons by city or state
+
+    getContactsByCity(): Map<string, Contact[]> {
+        const cityMap = new Map<string, Contact[]>() 
+        this.contacts.forEach(contact => {
+            const city = contact.city
+            if(!cityMap.has(city)){
+                cityMap.set(city, [])
+            }
+            cityMap.get(city)!.push(contact)
+        })
+        return cityMap
+    }
+
+    getContactsbyState() : Map<string, Contact[]> {
+        const stateMap = new Map<string, Contact[]> () 
+        this.contacts.forEach(contact => {
+            const state = contact.state
+            if(!stateMap.has(state)){
+                stateMap.set(state,[])
+            }
+            stateMap.get(state)!.push(contact)
+        }) 
+        return stateMap
+    }
  }
 
 

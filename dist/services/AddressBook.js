@@ -71,5 +71,28 @@ class AddressBook {
     searchByState(state) {
         return this.contacts.filter(c => c.state.toLowerCase() === state.toLowerCase());
     }
+    //* UC9 : Ability to view Persons by city or state
+    getContactsByCity() {
+        const cityMap = new Map();
+        this.contacts.forEach(contact => {
+            const city = contact.city;
+            if (!cityMap.has(city)) {
+                cityMap.set(city, []);
+            }
+            cityMap.get(city).push(contact);
+        });
+        return cityMap;
+    }
+    getContactsbyState() {
+        const stateMap = new Map();
+        this.contacts.forEach(contact => {
+            const state = contact.state;
+            if (!stateMap.has(state)) {
+                stateMap.set(state, []);
+            }
+            stateMap.get(state).push(contact);
+        });
+        return stateMap;
+    }
 }
 exports.AddressBook = AddressBook;
