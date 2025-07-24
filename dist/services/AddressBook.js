@@ -94,5 +94,8 @@ class AddressBook {
         });
         return stateMap;
     }
+    getSortedContactsbyName() {
+        return [...this.contacts].sort((a, b) => a.firstName.localeCompare(b.firstName));
+    }
 }
 exports.AddressBook = AddressBook;

@@ -25,5 +25,9 @@ class Contact {
         return (this.firstName.toLowerCase() === other.firstName.toLowerCase() &&
             this.lastName.toLowerCase() === other.lastName.toLowerCase());
     }
+    //* UC11 - Override toString for nice printing
+    toString() {
+        return `👤 ${this.firstName} ${this.lastName} | 🏠 ${this.address}, ${this.city}, ${this.state} - ${this.zip} | 📞 ${this.phoneNumber} | 📧 ${this.email}`;
+    }
 }
 exports.Contact = Contact;

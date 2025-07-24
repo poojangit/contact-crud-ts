@@ -109,6 +109,12 @@ export class AddressBook {
         }) 
         return stateMap
     }
+
+    getSortedContactsbyName() : Contact[] {
+        return [...this.contacts].sort((a,b) => 
+         a.firstName.localeCompare(b.firstName)
+        )
+    }
  }
 
 
