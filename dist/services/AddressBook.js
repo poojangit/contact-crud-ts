@@ -94,8 +94,22 @@ class AddressBook {
         });
         return stateMap;
     }
-    getSortedContactsbyName() {
-        return [...this.contacts].sort((a, b) => a.firstName.localeCompare(b.firstName));
+    //* UC11 & UC12: Ability to sort contacts by Name, City, State, or Zip
+    getSortedContactsByField(field) {
+        return [...this.contacts].sort((a, b) => {
+            switch (field) {
+                case "name":
+                    return (a.firstName + a.lastName).localeCompare(b.firstName + b.lastName);
+                case "city":
+                    return a.city.localeCompare(b.city);
+                case "state":
+                    return a.state.localeCompare(b.state);
+                case "zip":
+                    return (a.zip || 0) - (b.zip || 0);
+                default:
+                    return 0;
+            }
+        });
     }
 }
 exports.AddressBook = AddressBook;
