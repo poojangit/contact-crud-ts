@@ -2,7 +2,6 @@ import { AddressBook } from "../services/AddressBook";
 import { AddressBookManager } from "../managers/AddressBookManager";
 import { getInput } from "../utils/input";
 import { isValidAddressBookName } from "../utils/validators";
-import { Contact } from "../models/Contact";
 import { ReportManager } from "../managers/ReportManager";
 
 export class AddressBookMain {

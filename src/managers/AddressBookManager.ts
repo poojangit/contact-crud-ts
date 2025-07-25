@@ -3,6 +3,7 @@ import { AddressBook } from "../services/AddressBook";
 import { Contact } from "../models/Contact";
 import {isValidName, isValidAddress, isValidCityOrState  ,isValidEmail, isValidPhoneNumber, isValidZipCode } from "../utils/validators";
 import { getInput , getNumericInput } from "../utils/input";
+import { FileManager } from "../utils/FileManager";
 
 export class AddressBookManager {
     private addressBook : AddressBook
@@ -20,7 +21,9 @@ export class AddressBookManager {
             3. Delete Contact 
             4. Display all contacts
             5. Sort Contacts (by Name/city/state/zip)
-            6. Back to Main Menu`);
+            6. Save to file
+            7. Load from file
+            8. Back to Main Menu`);
 
            const option = getInput("Choose an option: ");
             switch (option) {
@@ -41,7 +44,17 @@ export class AddressBookManager {
                 case "5" :
                     this.displaySortedContactsByField()
                     break;   
-                case "6":
+                case "6" : 
+                    const saveName = getInput("Enter file path to save (e.g., addressbook.txt): ");
+                    FileManager.saveToFile(saveName, this.addressBook.getAllContacts());
+                    break;
+                case "7" :
+                    const loadPath = getInput("Enter file path to load: ");
+                    const fileContent = FileManager.readFromFile(loadPath);
+                    if (fileContent) 
+                        console.log("\n" + fileContent);
+                    break;
+                case "8":
                     backToMainMenu = true;
                     break;
                 default:
