@@ -1,0 +1,22 @@
+[
+  {
+    "firstName": "Amma",
+    "lastName": "Revathi",
+    "address": "Muthurme",
+    "city": "Udupi",
+    "state": "Karnataka",
+    "zip": 763636,
+    "phoneNumber": 78377373737,
+    "email": "revathi@gmail.com"
+  },
+  {
+    "firstName": "Appa",
+    "lastName": "Ganapathi",
+    "address": "Muthurme",
+    "city": "Udupi",
+    "state": "Karnataka",
+    "zip": 545546,
+    "phoneNumber": 7836464646,
+    "email": "ganapathi@gmail.com"
+  }
+]

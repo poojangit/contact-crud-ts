@@ -3,7 +3,6 @@ import { AddressBook } from "../services/AddressBook";
 import { Contact } from "../models/Contact";
 import {isValidName, isValidAddress, isValidCityOrState  ,isValidEmail, isValidPhoneNumber, isValidZipCode } from "../utils/validators";
 import { getInput , getNumericInput } from "../utils/input";
-import { FileManager } from "../utils/FileManager";
 
 export class AddressBookManager {
     private addressBook : AddressBook

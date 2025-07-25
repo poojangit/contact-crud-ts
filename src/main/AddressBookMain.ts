@@ -27,7 +27,9 @@ export class AddressBookMain {
             7. Load Address Book from File
             8. Save Address Book to CSV
             9. Load Address Book from CSV
-            10. Exit `); 
+            10. Save Address Book to JSON
+            11. Load Address Book from JSON
+            12. Exit `); 
         const choice = getInput("\nEnter your choice: ")
         switch(choice) {
             case "1" : 
@@ -53,7 +55,11 @@ export class AddressBookMain {
                 break;
             case "9": this.loadAddressBookFromCSV(); 
                 break;
-            case "10": console.log("\n Exiting the program....."); 
+            case "10": this.saveAddressBookToJSON(); 
+                break;
+            case "11": this.loadAddressBookFromJSON(); 
+                break;
+            case "12": console.log("\n Exiting the program....."); 
                 exit = true; 
                 break;
             default: console.warn("\nInvalid Choice! Please enter 1–10");
@@ -148,6 +154,32 @@ export class AddressBookMain {
             console.log("\nLoaded CSV Data:\n" + data);
         }
     }
+
+    private saveAddressBookToJSON(): void {
+    if (this.addressBooks.size === 0) {
+        console.log("\n⚠️ No Address Books to save.");
+        return;
+    }
+    console.log("\n📚 Available Address Books:");
+    [...this.addressBooks.keys()].forEach((name, index) => console.log(`${index + 1}. ${name}`));
+    const bookName = getInput("Enter the name of the Address Book to save as JSON: ");
+    const addressBook = this.addressBooks.get(bookName.trim());
+    if (!addressBook) {
+        console.log("❌ Address Book not found.");
+        return;
+    }
+    const fileName = getInput("Enter JSON file name (e.g., mybook.json): ");
+    FileManager.saveToJSON(fileName, addressBook.getAllContacts());
+}
+
+    private loadAddressBookFromJSON(): void {
+        const fileName = getInput("Enter JSON file name to load: ");
+        const data = FileManager.readFromJSON(fileName);
+        if (data) {
+            console.log("\nLoaded JSON Data:\n", data);
+        }
+    }
+    
 }
 
 
