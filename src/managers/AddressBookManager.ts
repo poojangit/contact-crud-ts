@@ -21,9 +21,7 @@ export class AddressBookManager {
             3. Delete Contact 
             4. Display all contacts
             5. Sort Contacts (by Name/city/state/zip)
-            6. Save to file
-            7. Load from file
-            8. Back to Main Menu`);
+            6. Back to Main Menu`);
 
            const option = getInput("Choose an option: ");
             switch (option) {
@@ -44,17 +42,7 @@ export class AddressBookManager {
                 case "5" :
                     this.displaySortedContactsByField()
                     break;   
-                case "6" : 
-                    const saveName = getInput("Enter file path to save (e.g., addressbook.txt): ");
-                    FileManager.saveToFile(saveName, this.addressBook.getAllContacts());
-                    break;
-                case "7" :
-                    const loadPath = getInput("Enter file path to load: ");
-                    const fileContent = FileManager.readFromFile(loadPath);
-                    if (fileContent) 
-                        console.log("\n" + fileContent);
-                    break;
-                case "8":
+                case "6":
                     backToMainMenu = true;
                     break;
                 default:
