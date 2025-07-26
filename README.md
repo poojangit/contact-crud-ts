@@ -13,7 +13,7 @@ The application is designed with Single Responsibility Principle (SRP) and Separ
 # How to run ? 
 
 1. Clone the repositoty
-   - git clone git@github.com:poojangit/contact-crud-ts.git
+   - git clone https://github.com/poojangit/contact-crud-ts.git
 2. Navigate to project folder
    - cd address-book
 3. Install dependencies
