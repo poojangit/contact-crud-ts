@@ -47,17 +47,17 @@ export class AddressBookMain {
             case "5" :
                 reportManager.countContactsByCityOrState()
                 break
-            case "6": this.saveAddressBookToFile(); 
+            case "6": this.saveAddressBook("txt"); 
                 break;
-            case "7": this.loadAddressBookFromFile(); 
+            case "7": this.loadAddressBook("txt"); 
                 break;
-            case "8": this.saveAddressBookToCSV(); 
+            case "8": this.saveAddressBook("csv"); 
                 break;
-            case "9": this.loadAddressBookFromCSV(); 
+            case "9": this.loadAddressBook("csv"); 
                 break;
-            case "10": this.saveAddressBookToJSON(); 
+            case "10": this.saveAddressBook("json"); 
                 break;
-            case "11": this.loadAddressBookFromJSON(); 
+            case "11": this.loadAddressBook("json"); 
                 break;
             case "12": console.log("\n Exiting the program....."); 
                 exit = true; 
@@ -105,81 +105,66 @@ export class AddressBookMain {
         manager.manage();
     }
 
-    private saveAddressBookToFile(): void {
+    private chooseAddressBook(action: string): AddressBook | null {
         if (this.addressBooks.size === 0) {
-            console.log("\n⚠️ No Address Books to save.");
-            return;
+            console.log(`\n⚠️ No Address Books to ${action} `);
+            return null;
         }
         console.log("\n📚 Available Address Books:");
         [...this.addressBooks.keys()].forEach((name, index) => console.log(`${index + 1}. ${name}`));
-        const bookName = getInput("Enter the name of the Address Book to save: ");
+        const bookName = getInput(`Enter the name of the Address Book to ${action}: `);
         const addressBook = this.addressBooks.get(bookName.trim());
         if (!addressBook) {
             console.log("❌ Address Book not found.");
-            return;
+            return null;
         }
-        const fileName = getInput("Enter file name to save (e.g., mybook.txt): ");
-        FileManager.saveToFile(fileName, addressBook.getAllContacts());
-    }
+        return addressBook
+   }
 
-    private loadAddressBookFromFile(): void {
-        const fileName = getInput("Enter file name to load: ");
-        const data = FileManager.readFromFile(fileName);
-        if (data) {
-            console.log("\nLoaded Data:\n" + data);
-        }
-    }
-    //* UC14 - Ability to Read/Write the Address Book with Persons Contact as CSV File 
-    private saveAddressBookToCSV(): void {
-        if (this.addressBooks.size === 0) {
-            console.log("\n⚠️ No Address Books to save.");
-            return;
-        }
-        console.log("\n📚 Available Address Books:");
-        [...this.addressBooks.keys()].forEach((name, index) => console.log(`${index + 1}. ${name}`));
-        const bookName = getInput("Enter the name of the Address Book to save as CSV: ");
-        const addressBook = this.addressBooks.get(bookName.trim());
-        if (!addressBook) {
-            console.log("❌ Address Book not found.");
-            return;
-        }
-        const fileName = getInput("Enter CSV file name (e.g., mybook.csv): ");
-        FileManager.saveToCSV(fileName, addressBook.getAllContacts());
-    }
+   //* UC13, UC14, UC15 - applied DRY design principle (No dublication of code)
 
-    private loadAddressBookFromCSV(): void {
-        const fileName = getInput("Enter CSV file name to load: ");
-        const data = FileManager.readFromCSV(fileName);
-        if (data) {
-            console.log("\nLoaded CSV Data:\n" + data);
-        }
-    }
-
-    private saveAddressBookToJSON(): void {
-    if (this.addressBooks.size === 0) {
-        console.log("\n⚠️ No Address Books to save.");
-        return;
-    }
-    console.log("\n📚 Available Address Books:");
-    [...this.addressBooks.keys()].forEach((name, index) => console.log(`${index + 1}. ${name}`));
-    const bookName = getInput("Enter the name of the Address Book to save as JSON: ");
-    const addressBook = this.addressBooks.get(bookName.trim());
-    if (!addressBook) {
-        console.log("❌ Address Book not found.");
-        return;
-    }
-    const fileName = getInput("Enter JSON file name (e.g., mybook.json): ");
-    FileManager.saveToJSON(fileName, addressBook.getAllContacts());
-}
-
-    private loadAddressBookFromJSON(): void {
-        const fileName = getInput("Enter JSON file name to load: ");
-        const data = FileManager.readFromJSON(fileName);
-        if (data) {
-            console.log("\nLoaded JSON Data:\n", data);
-        }
-    }
+   private chooseFileName(prompt : string) : string {
+    return getInput(prompt)
+   }
     
+    private saveAddressBook(format: "txt" | "csv" | "json") : void {
+        const addressBook = this.chooseAddressBook(`Save as ${format.toUpperCase()}`)
+        if(!addressBook) 
+            return;
+        const fileName = this.chooseFileName(`Enter ${format.toUpperCase()} file name (e.g., mybook.${format})`)
+        const contacts = addressBook.getAllContacts()
+        switch(format) {
+            case "txt" : 
+                FileManager.saveToFile(fileName, contacts)
+                break
+            case "csv" :
+                FileManager.saveToCSV(fileName, contacts)
+                break
+            case "json" : 
+                FileManager.saveToJSON(fileName, contacts)
+                break
+        }
+    }
+
+    private loadAddressBook(format : "txt" | "csv" | "json") : void {
+        const fileName = this.chooseFileName(`Enter ${format.toUpperCase()} file name to load: `)
+        let data : string | object | null = null 
+        switch(format) {
+            case "txt" : 
+                data = FileManager.readFromFile(fileName)
+                break
+            case "csv" : 
+                data = FileManager.readFromCSV(fileName)
+                break
+            case "json" : 
+                data = FileManager.readFromJSON(fileName)
+                break
+        }
+        if(data) {
+            console.log(`\n Loaded ${format.toUpperCase()} Data: \n`, data);
+            
+        }
+    }
 }
 
 
