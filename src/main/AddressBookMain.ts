@@ -162,7 +162,6 @@ export class AddressBookMain {
         }
         if(data) {
             console.log(`\n Loaded ${format.toUpperCase()} Data: \n`, data);
-            
         }
     }
 }
